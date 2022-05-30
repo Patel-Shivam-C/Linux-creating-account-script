@@ -1,0 +1,69 @@
+#!/bin/bash
+PATH=/bin:/usr/bin:/usr/sbin ; export PATH
+umask 022
+
+#Name: Patel Shivam
+#Student number: 041043423
+#course Code: CST8102
+#Lab section: 311
+#"myscripts" script allow admin to create, delete and modify user.
+
+while [[ $yourSelection != "Q" ]] && [[ $yourSelection != "q" ]] 
+do
+	echo "Choose the following options:"
+	echo "A) Create a user Account"
+	echo "B) Delete a user Account"
+	echo "C) Change supplementary group for user account"
+	echo "D) Change initial group for a user account"
+	echo "E) Change default login shell for a user account"
+	echo "F) Change account expiration date for a user account"
+	echo "Q) Quit"
+	read -p "What would you like to do?: " yourSelection
+
+
+	if [[ $yourSelection == "A" ]] || [[ $yourSelection == "a" ]]
+	then
+		read -p "Enter username: " userName
+		read -p "Enter diretory: " userDirectory 
+		read -p "Enter login shell: " userLoginShell
+		useradd -d "$userDirectory" -s "$userLoginShell" "$userName"
+		echo "User $userName is created"
+		echo
+	elif [[ $yourSelection == "B" ]] || [[ $yourSelection == "b" ]]
+	then
+		#getent passwd | cut -d: -f1
+		read -p "Enter username to delete: " userName
+		userdel "$userName"
+		echo "User $userName is deleted"
+		echo
+	elif [[ $yourSelection == "C" ]] || [[ $yourSelection == "c" ]]
+	then
+		read -p "For which user you want to change supplementary group: " userName
+		read -p "Supplementary group name: " supplementaryGroup
+		usermod -G "$supplementaryGroup" "$userName"
+		echo "Supplementary group is changed for user $userName"
+		echo
+	elif [[ $yourSelection == "D" ]] || [[ $yourSelection == "d" ]]
+	then
+		read -p "For which user you want to change intial group: " userName
+		read -p "Intial group name: " intialGroup
+		usermod -g "$intialGroup" "$userName"
+		echo "Intial group is changed for user $userName"
+		echo
+	elif [[ $yourSelection == "E" ]] || [[ $yourSelection == "e" ]]
+	then
+		read -p "For which user you want to change login shell: " userName
+		read -p "Which login shell: " loginShellName
+		chsh -s "$loginShellName" "$userName"
+		echo "Login shell is changed for user $userName"
+		echo
+	elif [[ $yourSelection == "F" ]] || [[ $yourSelection == "f" ]]
+	then
+		read -p "For which user you want to change expire date: " userName
+		read -p "Enter new expire date (formate: YYYY-MM-DD): " expireDate
+		usermod -e "$expireDate" "$userName"
+		echo "Expire date is changed for user $userName"
+		echo
+	fi
+done
+echo "Modidfication of users is completed."
